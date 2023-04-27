@@ -1,0 +1,29 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: training_airline_pipeline
+compute: azureml:cpu-cluster
+jobs:
+    train_job:
+        code: ./scripts
+        command: >-
+            python train.py 
+            --input_data ${{inputs.airline_data}}
+            --output_dir ${{outputs.outputs}}
+        environment: azureml:airline-training-env@latest
+        inputs:
+            airline_data:
+                type: uri_file
+                path: azureml:airline_dataset@latest
+            mlflow_exp_name: train-airline
+        outputs:
+            outputs:
+            
+    register_job:
+        code: ./scripts
+        command: >-
+            python register.py
+            --model_name airline-model
+            --model_path ${{inputs.input}}
+        environment: azureml:airline-training-env@latest
+        inputs:
+            input: ${{parent.jobs.train_job.outputs.outputs}}
