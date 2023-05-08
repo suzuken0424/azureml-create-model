@@ -1,10 +1,11 @@
 name: Azure ML Trigger Pipeline
 
 on:
-  schedule:
-    # 月曜日の 11:00 (JST) に処理を実行する。
-    # UTC の 02:00 は JST だと 11:00 。
-    - cron: "46 2 * * *"
+  # 月曜日の 11:27 (JST) に処理を実行する。
+  # UTC の 02:27 は JST だと 11:27 。
+  # schedule:
+  #   - cron: "27 2 * * *"
+  workflow_dispatch:
 
 defaults:
   run:
